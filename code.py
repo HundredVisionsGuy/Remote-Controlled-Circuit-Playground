@@ -27,6 +27,8 @@ PURPLE = (180, 0, 255)
 
 num_pixels = 10
 cp.pixels.brightness = 0.4
+
+
 def color_chase(wait):
     COLORS = (
         RED, YELLOW, GREEN, CYAN, BLUE, PURPLE
@@ -45,6 +47,29 @@ def color_chase(wait):
 
 def color_off(pos: int):
     cp.pixels[pos] = (0, 0, 0)
+
+
+def color_wheel(pos):
+    # Input a value 0 to 255 to get a color value.
+    # The colours are a transition r - g - b - back to r.
+    if pos < 0 or pos > 255:
+        return (0, 0, 0)
+    if pos < 85:
+        return (255 - pos * 3, pos * 3, 0)
+    if pos < 170:
+        pos -= 85
+        return (0, 255 - pos * 3, pos * 3)
+    pos -= 170
+    return (pos * 3, 0, 255 - pos * 3)
+
+
+def rainbow_cycle(wait):
+    for j in range(255):
+        for i in range(10):
+            rc_index = (i * 256 // 10) + j
+            cp.pixels[i] = color_wheel(rc_index & 255)
+        cp.pixels.show()
+        time.sleep(wait)
 
 
 while True:
